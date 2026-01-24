@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+
+# Builds
+dist/
+*.js.map
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store

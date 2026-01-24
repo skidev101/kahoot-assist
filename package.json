@@ -1,0 +1,20 @@
+{
+  "name": "kahoot-assist",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "backend:dev": "cd backend && pnpm run dev",
+    "backend:start:dev": "cd backend && pnpm run start:dev",
+    "backend:build": "cd backend && pnpm run build",
+    "backend:start": "cd backend && pnpm run start",
+    "extension:dev": "pnpm exec tsc --project extension/tsconfig.json --watch",
+    "extension:build": "pnpm exec tsc --project extension/tsconfig.json",
+    "dev": "concurrently \"pnpm run backend:start:dev\" \"pnpm run extension:dev\"",
+    "build": "pnpm run backend:build && pnpm run extension:build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.9.3"
+  }
+}

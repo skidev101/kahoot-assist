@@ -2,31 +2,38 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
+if (!genAI) throw new Error("AI not configured yet")
+
 export async function solveQuestion(
   question: string,
-  answers: string[]
+  answers: string[],
+  hints?: string
 ): Promise<{ answerIndex: number; confidence: number }> {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-001" });
     const prompt = `
-You are answering a multiple-choice question.
+    You are a smart Bible study assistant answering a multiple-choice question.
 
-Question:
-${question}
+    Question:
+    ${question}
 
-Answers:
-${answers.map((a, i) => `${i}: ${a}`).join("\n")}
 
-Rules:
-- Choose the most likely correct answer
-- If unsure, return answerIndex = -1
-- Respond ONLY in JSON
+    Hints:
+    ${hints ? hints : "No hints"}
 
-Output format:
-{
-  "answerIndex": number,
-  "confidence": number
-}`;
+    Answers:
+    ${answers.map((a, i) => `${i}: ${a}`).join("\n")}
+
+    Rules:
+    - Choose the most likely correct answer
+    - If unsure, return answerIndex = -1
+    - Respond ONLY in JSON
+
+    Output format:
+    {
+      "answerIndex": number,
+      "confidence": number
+    }`;
 
     const result = await model.generateContent(prompt);
     const text = result.response.text();
